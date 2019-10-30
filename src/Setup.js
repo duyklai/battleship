@@ -2,8 +2,8 @@
  * Responsible for creating and modifiying DOM of webpage
  * Will be creating both grids for players and "sidebars"
  * **/
-import Board from './Gameboard';
-import Ship from './Ship';
+const Board = require('../src/Gameboard');
+const Ship = require('../src/Ship');
 
 // Function to create DOM/UI for status side board
 function setupStatusBoard() {
@@ -49,17 +49,18 @@ function setupPlayer() {
   let playerBoard = Board();
 
   // TEMPORARY SHIP CREATION AND PLACEMENTS
-  let cruiser = Ship('cruiser', 5);
-  playerBoard.placeShip(1, 1, cruiser);
-  let battleship = Ship('battleship', 4);
-  playerBoard.placeShip(2, 2, battleship);
-  let destroyer = Ship('destroyer', 3);
-  playerBoard.placeShip(3, 3, destroyer);
-  let submarine = Ship('submarine', 3);
-  playerBoard.placeShip(4, 4, submarine);
-  let patrol = Ship('patrol boat', 2);
-  playerBoard.placeShip(5, 5, patrol);
-  const shipBoard = playerBoard.placeShip(4, 4, patrol);
+  // REMOVE
+  //   let cruiser = Ship('cruiser', 5);
+  //   playerBoard.placeShip(1, 1, cruiser);
+  //   let battleship = Ship('battleship', 4);
+  //   playerBoard.placeShip(2, 2, battleship);
+  //   let destroyer = Ship('destroyer', 3);
+  //   playerBoard.placeShip(3, 3, destroyer);
+  //   let submarine = Ship('submarine', 3);
+  //   playerBoard.placeShip(4, 4, submarine);
+  //   let patrol = Ship('patrol boat', 2);
+  //   const shipBoard = playerBoard.placeShip(5, 5, patrol);
+  const shipBoard = playerBoard.placeShip(1, 1, 'Carrier');
 
   // Creating grid for player's board
   player_div.style.gridTemplateRows = GRID_STRING.repeat(GRID_SIZE);
@@ -72,12 +73,14 @@ function setupPlayer() {
       // Adding coordinates of square as data
       square.dataset.coordinateX = i;
       square.dataset.coordinateY = j;
+      // MAYBE REMOVE
       if (shipBoard[i][j] === 'x') {
         square.style.backgroundColor = 'black';
       }
       // Adding event listener onclick
       square.addEventListener('click', function(e) {
         e.target.style.backgroundColor = 'white';
+        console.log(e.target);
       });
       player_div.appendChild(square);
     }
@@ -99,6 +102,14 @@ function setupComputer() {
   // Making the game object for computer's board
   let computerBoard = Board();
 
+  // TEMPORARY SHIP CREATION AND PLACEMENTS
+  // REMOVE
+  computerBoard.placeShip(1, 1, 'Carrier');
+  computerBoard.placeShip(2, 2, 'Battleship');
+  computerBoard.placeShip(4, 3, 'Destroyer');
+  computerBoard.placeShip(6, 4, 'Submarine');
+  const shipBoard = computerBoard.placeShip(7, 3, 'Patrol');
+
   // Creating grid for computer's board
   comp_div.style.gridTemplateRows = GRID_STRING.repeat(GRID_SIZE);
   comp_div.style.gridTemplateColumns = GRID_STRING.repeat(GRID_SIZE);
@@ -110,13 +121,30 @@ function setupComputer() {
       // Adding coordinates of square as data
       square.dataset.coordinateX = i;
       square.dataset.coordinateY = j;
+      // Used to light up where ship is
+      // REMOVE
+      if (typeof shipBoard[i][j] === 'object') {
+        square.style.backgroundColor = 'black';
+      }
       // Adding event listener onclick
       square.addEventListener('click', function(e) {
-        e.target.style.backgroundColor = 'white';
-        computerBoard.receiveAttack(
-          e.target.dataset.coordinateX,
-          e.target.dataset.coordinateY
-        );
+        //e.target.style.backgroundColor = 'white';
+        console.log(e.target);
+
+        if (
+          computerBoard.receiveAttack(
+            e.target.dataset.coordinateX,
+            e.target.dataset.coordinateY
+          )
+        ) {
+          e.target.style.backgroundColor = 'red';
+        } else {
+          e.target.style.backgroundColor = 'white';
+        }
+
+        if (computerBoard.sunkenAll()) {
+          console.log('all ships down');
+        }
       });
       comp_div.appendChild(square);
     }
@@ -146,6 +174,8 @@ function initialSetup() {
   content_div.appendChild(compBoard);
   body.prepend(content_div);
   body.prepend(header);
+
+  // START GAME HERE?? REMOVE
 }
 
 export default { initialSetup };
