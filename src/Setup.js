@@ -3,7 +3,14 @@
  * Will be creating both grids for players and "sidebars"
  * **/
 const Board = require('../src/Gameboard');
-const Ship = require('../src/Ship');
+//const Ship = require('../src/Ship'); REMOVE
+const Player = require('../src/Player');
+
+// maybe not remove
+let playerOne;
+let playerTwo;
+// REMOVE
+let placingOnGrid = false;
 
 // Function to create DOM/UI for status side board
 function setupStatusBoard() {
@@ -28,6 +35,7 @@ function setupStatusBoard() {
     ship_names.innerHTML = ship;
     ship_names.addEventListener('click', function(e) {
       // Allow user to place ship after clicking on ship name
+      placingOnGrid = true;
     });
     ship_div.appendChild(ship_names);
   }
@@ -50,17 +58,11 @@ function setupPlayer() {
 
   // TEMPORARY SHIP CREATION AND PLACEMENTS
   // REMOVE
-  //   let cruiser = Ship('cruiser', 5);
-  //   playerBoard.placeShip(1, 1, cruiser);
-  //   let battleship = Ship('battleship', 4);
-  //   playerBoard.placeShip(2, 2, battleship);
-  //   let destroyer = Ship('destroyer', 3);
-  //   playerBoard.placeShip(3, 3, destroyer);
-  //   let submarine = Ship('submarine', 3);
-  //   playerBoard.placeShip(4, 4, submarine);
-  //   let patrol = Ship('patrol boat', 2);
-  //   const shipBoard = playerBoard.placeShip(5, 5, patrol);
-  const shipBoard = playerBoard.placeShip(1, 1, 'Carrier');
+  playerBoard.placeShip(1, 1, 'Carrier');
+  playerBoard.placeShip(2, 2, 'Battleship');
+  playerBoard.placeShip(4, 3, 'Destroyer');
+  playerBoard.placeShip(6, 4, 'Submarine');
+  const shipBoard = playerBoard.placeShip(7, 3, 'Patrol');
 
   // Creating grid for player's board
   player_div.style.gridTemplateRows = GRID_STRING.repeat(GRID_SIZE);
@@ -74,18 +76,15 @@ function setupPlayer() {
       square.dataset.coordinateX = i;
       square.dataset.coordinateY = j;
       // MAYBE REMOVE
-      if (shipBoard[i][j] === 'x') {
+      if (typeof shipBoard[i][j] === 'object') {
         square.style.backgroundColor = 'black';
       }
       // Adding event listener onclick
-      square.addEventListener('click', function(e) {
-        e.target.style.backgroundColor = 'white';
-        console.log(e.target);
-      });
+      square.addEventListener('mouseenter', placementMouseOver, false);
       player_div.appendChild(square);
     }
   }
-  return player_div;
+  return [player_div, playerBoard];
 }
 
 // Function to create DOM/UI for Computer's board
@@ -128,20 +127,22 @@ function setupComputer() {
       }
       // Adding event listener onclick
       square.addEventListener('click', function(e) {
-        //e.target.style.backgroundColor = 'white';
-        console.log(e.target);
+        //console.log(e.target);
+        let attack = computerBoard.receiveAttack(
+          e.target.dataset.coordinateX,
+          e.target.dataset.coordinateY
+        );
 
-        if (
-          computerBoard.receiveAttack(
-            e.target.dataset.coordinateX,
-            e.target.dataset.coordinateY
-          )
-        ) {
+        if (attack) {
           e.target.style.backgroundColor = 'red';
+          playerTwo.computerPlay();
+        } else if (attack == null) {
         } else {
+          playerTwo.computerPlay();
           e.target.style.backgroundColor = 'white';
         }
 
+        // REMOVE
         if (computerBoard.sunkenAll()) {
           console.log('all ships down');
         }
@@ -149,7 +150,7 @@ function setupComputer() {
       comp_div.appendChild(square);
     }
   }
-  return comp_div;
+  return [comp_div, computerBoard];
 }
 
 function initialSetup() {
@@ -166,16 +167,29 @@ function initialSetup() {
   content_div.className = 'content-div';
 
   let statusBoard = setupStatusBoard();
-  let playerBoard = setupPlayer();
-  let compBoard = setupComputer();
+  let [playerDiv, playerBoard] = setupPlayer();
+  let [compDiv, compBoard] = setupComputer();
 
   content_div.appendChild(statusBoard);
-  content_div.appendChild(playerBoard);
-  content_div.appendChild(compBoard);
+  content_div.appendChild(playerDiv);
+  content_div.appendChild(compDiv);
   body.prepend(content_div);
   body.prepend(header);
 
   // START GAME HERE?? REMOVE
+  startGame(playerBoard, compBoard, playerDiv, compDiv);
+}
+
+// Create players for game REMOVE
+function startGame(playerBoard, compBoard, playerDiv, compDiv) {
+  playerOne = Player('player', compBoard, compDiv);
+  playerTwo = Player('computer', playerBoard, playerDiv);
+}
+
+function placementMouseOver(e) {
+  var self = e.target;
+  console.log(self);
+  if (placingOnGrid) console.log('placing ship');
 }
 
 export default { initialSetup };

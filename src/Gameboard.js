@@ -13,6 +13,7 @@ const Gameboard = () => {
   let ship_obj;
   let numOfShips = 0;
 
+  // Function to place the ship
   const placeShip = (x, y, Ship_name) => {
     let length = 0;
     for (let ship in ships) {
@@ -25,42 +26,74 @@ const Gameboard = () => {
         );
       }
     }
-    // Return error?
+    // Return error? REMOVE
     if (checkBounds(x, y, ship_obj.getLength())) return;
     while (length < ship_obj.getLength()) {
       shipBoard[x][y + length] = ship_obj;
       length++;
     }
-    console.log(shipBoard);
-    //numOfShips++; REMOVE
     return shipBoard;
   };
 
+  // Returns true if attack hits ship
+  // IMPORTANT: Returns null if spot has been taken
+  // Else returns false
   const receiveAttack = (x, y) => {
-    hitBoard[x][y] = 'x';
-    //if (hitBoard[x][y] === shipBoard[x][y]) { REMOVE
     if (typeof shipBoard[x][y] === 'object') {
       shipBoard[x][y].hit(x, y);
       if (shipBoard[x][y].isSunk()) {
         numOfShips++;
       }
+      hitBoard[x][y] = 'x';
+      console.log('hit ship');
       return true;
-    } else return false;
+    } else if (hitBoard[x][y] == 'x') {
+      console.log('same mark');
+      return null;
+    } else if (hitBoard[x][y] == undefined) {
+      hitBoard[x][y] = 'x';
+      console.log('hit nothing');
+      return false;
+    }
   };
 
   // Function returns whether all ships has been sunk
   const sunkenAll = () => {
-    console.log(numOfShips);
+    // console.log(numOfShips); REMOVE
     return numOfShips === 5 ? true : false;
   };
 
+  // Debug function REMOVE
+  const getShipBoard = () => {
+    return shipBoard;
+  };
+
+  const getHitBoard = () => {
+    return hitBoard;
+  };
+
   // Private function
+  // Function to check if ship placements are inbound according to length
   const checkBounds = (x, y, length) => {
     if (x + length > 10 || y + length > 10) return true;
     return false;
   };
 
-  return { placeShip, receiveAttack, sunkenAll };
+  // Function to check if attack is has hit the spot before or not
+  const checkAttack = (x, y) => {
+    if (hitBoard[x][y] == 'x') return true;
+    else if (hitBoard[x][y] == undefined) return false;
+  };
+
+  // REMOVE DEBUG FUNCTIONS
+  return {
+    placeShip,
+    receiveAttack,
+    sunkenAll,
+    getShipBoard,
+    getHitBoard,
+    checkAttack
+  };
 };
 
 module.exports = Gameboard;
