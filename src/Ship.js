@@ -1,3 +1,12 @@
+/**
+ * This factory function will take care of creating the ship object.
+ * Each ship object will have an array of objects indicating their x/y coordinates and whether that x/y coordinates has been hit
+ * Ship object will have a boolean checking if ship has been sunked
+ * @param {string} input_name currently not used
+ * @param {int} input_length
+ * @param {int} input_start
+ * @param {int} input_end
+ */
 const Ship = (input_name, input_length, input_start, input_end) => {
   const name = input_name;
   const length = input_length;
@@ -34,7 +43,6 @@ const Ship = (input_name, input_length, input_start, input_end) => {
   // Function to return if ship is fully damaged (sunk) or not
   const isSunk = () => {
     if (hit_marker.every(pos => pos.hit == true)) {
-      console.log('we did it');
       sunk = true;
     }
     return sunk;

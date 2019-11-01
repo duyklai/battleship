@@ -9,18 +9,21 @@ const Player = require('../src/Player');
 // maybe not remove
 let playerOne;
 let playerTwo;
-// REMOVE
+// maybe not remove
 let placingOnGrid = false;
+let direction = 'horizontal';
+let currentShip = null;
+let ship_length = 0;
 
 // Function to create DOM/UI for status side board
 function setupStatusBoard() {
   // Array of all possible ships
   let ships = [
-    'Carrier',
-    'Battleship',
-    'Destroyer',
-    'Submarine',
-    'Patrol Boat'
+    ['Carrier', 5],
+    ['Battleship', 4],
+    ['Destroyer', 3],
+    ['Submarine', 3],
+    ['Patrol Boat', 2]
   ];
   // Container for holding ships to place and start button
   // Maybe for ships destroyed??? REMOVE
@@ -29,16 +32,27 @@ function setupStatusBoard() {
   let ship_div_title = document.createElement('h2');
   ship_div_title.innerHTML = 'Place your ships';
   ship_div.appendChild(ship_div_title);
-  for (let ship of ships) {
+  for (let i = 0; i < ships.length; i++) {
     let ship_names = document.createElement('p');
-    ship_names.className = 'ships';
-    ship_names.innerHTML = ship;
+    ship_names.className = ships[i][0];
+    ship_names.innerHTML = ships[i][0];
     ship_names.addEventListener('click', function(e) {
       // Allow user to place ship after clicking on ship name
       placingOnGrid = true;
+      currentShip = ships[i][0];
+      ship_length = ships[i][1];
     });
     ship_div.appendChild(ship_names);
   }
+  // Rotate button
+  const ship_rotate_button = document.createElement('button');
+  ship_rotate_button.className = 'ship-rotate';
+  ship_rotate_button.innerHTML = 'Rotate';
+  ship_rotate_button.addEventListener('click', function() {
+    if (direction == 'horizontal') direction = 'vertical';
+    else direction = 'horizontal';
+  });
+  ship_div.appendChild(ship_rotate_button);
 
   return ship_div;
 }
@@ -58,11 +72,11 @@ function setupPlayer() {
 
   // TEMPORARY SHIP CREATION AND PLACEMENTS
   // REMOVE
-  playerBoard.placeShip(1, 1, 'Carrier');
-  playerBoard.placeShip(2, 2, 'Battleship');
-  playerBoard.placeShip(4, 3, 'Destroyer');
-  playerBoard.placeShip(6, 4, 'Submarine');
-  const shipBoard = playerBoard.placeShip(7, 3, 'Patrol');
+  // playerBoard.placeShip(1, 1, 'Carrier');
+  // playerBoard.placeShip(2, 2, 'Battleship');
+  // playerBoard.placeShip(4, 3, 'Destroyer');
+  // playerBoard.placeShip(6, 4, 'Submarine');
+  // const shipBoard = playerBoard.placeShip(7, 3, 'Patrol');
 
   // Creating grid for player's board
   player_div.style.gridTemplateRows = GRID_STRING.repeat(GRID_SIZE);
@@ -76,11 +90,20 @@ function setupPlayer() {
       square.dataset.coordinateX = i;
       square.dataset.coordinateY = j;
       // MAYBE REMOVE
-      if (typeof shipBoard[i][j] === 'object') {
-        square.style.backgroundColor = 'black';
-      }
+      // if (typeof shipBoard[i][j] === 'object') {
+      //   square.style.backgroundColor = 'black';
+      // }
       // Adding event listener onclick
       square.addEventListener('mouseenter', placementMouseOver, false);
+      square.addEventListener('mouseleave', placementMouseOut, false);
+      square.addEventListener('click', function(e) {
+        if (placingOnGrid) {
+          let x = parseInt(e.target.dataset.coordinateX, 10);
+          let y = parseInt(e.target.dataset.coordinateY, 10);
+
+          const tempship = playerBoard.placeShip(x, y, currentShip);
+        }
+      });
       player_div.appendChild(square);
     }
   }
@@ -188,8 +211,45 @@ function startGame(playerBoard, compBoard, playerDiv, compDiv) {
 
 function placementMouseOver(e) {
   var self = e.target;
-  console.log(self);
-  if (placingOnGrid) console.log('placing ship');
+  if (placingOnGrid) {
+    let x = parseInt(self.dataset.coordinateX, 10);
+    let y = parseInt(self.dataset.coordinateY, 10);
+    let el_arr = [];
+
+    if (direction == 'horizontal') {
+      if (y + ship_length <= 10) {
+        for (let i = y; i < y + ship_length; i++) {
+          let element = document.querySelector(
+            `[data-coordinate-x='${x}'][data-coordinate-y='${i}']`
+          );
+          el_arr.push(element);
+          element.classList.add('selected');
+        }
+      }
+    } else {
+      if (x + ship_length <= 10) {
+        for (let i = x; i < x + ship_length; i++) {
+          let element = document.querySelector(
+            `[data-coordinate-x='${i}'][data-coordinate-y='${y}']`
+          );
+          el_arr.push(element);
+          element.classList.add('selected');
+        }
+      }
+    }
+  }
+}
+
+function placementMouseOut(e) {
+  var self = e.target;
+  if (placingOnGrid) {
+    let x = parseInt(self.dataset.coordinateX, 10);
+    let y = parseInt(self.dataset.coordinateY, 10);
+    let currentSelected = document.querySelectorAll('.selected');
+    currentSelected.forEach(node => {
+      node.classList.remove('selected');
+    });
+  }
 }
 
 export default { initialSetup };

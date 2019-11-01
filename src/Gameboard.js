@@ -14,6 +14,8 @@ const Gameboard = () => {
   let numOfShips = 0;
 
   // Function to place the ship
+  // Returns shipBoard if ship has been placed successfully
+  // Returns false otherwise
   const placeShip = (x, y, Ship_name) => {
     let length = 0;
     for (let ship in ships) {
