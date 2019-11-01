@@ -24,26 +24,32 @@ describe('testing gameboard', () => {
   // });
 
   test('Return undefined when placing ship will cause out of bounds for x', () => {
-    expect(board.placeShip(7, 2, 'Carrier')).toBeUndefined();
+    expect(board.placeShip(7, 2, 'Carrier', 'horizontal')).toBeUndefined();
   });
 
   test('Return undefined when placing y will cause outOfBounds', () => {
-    expect(board.placeShip(4, 8, 'Carrier')).toBeUndefined();
+    expect(board.placeShip(4, 8, 'Carrier', 'vertical')).toBeUndefined();
   });
 
   test('Returns true when ship has been hit', () => {
-    board.placeShip(2, 2, 'Carrier');
+    board.placeShip(2, 2, 'Carrier', 'horizontal');
     expect(board.receiveAttack(2, 4)).toBeTruthy();
   });
 
   test('Returns false when attack misses', () => {
-    board.placeShip(2, 2, 'Carrier');
+    board.placeShip(2, 2, 'Carrier', 'vertical');
     expect(board.receiveAttack(2, 8)).toBeFalsy();
   });
 
   test('Returns null when attacking an already attacked spot', () => {
-    board.placeShip(2, 2, 'Carrier');
+    board.placeShip(2, 2, 'Carrier', 'vertical');
     board.receiveAttack(2, 8);
     expect(board.receiveAttack(2, 8)).toBeNull();
+  });
+
+  test('Returns null when attacking an already attacked ship spot', () => {
+    board.placeShip(2, 2, 'Carrier', 'horizontal');
+    board.receiveAttack(2, 3);
+    expect(board.receiveAttack(2, 3)).toBeNull();
   });
 });
