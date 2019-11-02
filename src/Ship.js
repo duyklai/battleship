@@ -6,7 +6,7 @@
  * @param {int} input_length
  * @param {int} input_start
  * @param {int} input_end
- */
+ **/
 const Ship = (input_name, input_length, input_start, input_end) => {
   const name = input_name;
   const length = input_length;
