@@ -69,6 +69,8 @@ const EventHandler = () => {
     ]);
     // If not all ships have been placed, keep going
     while (!allShipsPlaced) {
+      // Using a private helper which does not return function but just changes the current direction
+      if (Math.floor(Math.random() * 10) % 2 == 0) changeSetDirection();
       // Generate x/y coordinates to ship placement
       xPlace = Math.floor(Math.random() * 10);
       yPlace = Math.floor(Math.random() * 10);
@@ -83,7 +85,10 @@ const EventHandler = () => {
         numOfShipsPlaced++; // Increment total of placed ships
       } else continue;
       // Once all 5 ships have been placed, exit loop
-      if (numOfShipsPlaced == 5) allShipsPlaced = true;
+      if (numOfShipsPlaced == 5) {
+        direction = 'horizontal';
+        allShipsPlaced = true;
+      }
     }
   };
 
@@ -348,6 +353,13 @@ const EventHandler = () => {
     return function() {
       document.location.reload();
     };
+  };
+
+  // Helper function to change direction without returning a function
+  // This is different from changeDirection function above
+  const changeSetDirection = () => {
+    if (direction == 'horizontal') direction = 'vertical';
+    else direction = 'horizontal';
   };
 
   return {
