@@ -1,5 +1,5 @@
 const Board = require('../src/Gameboard');
-const Ship = require('../src/Ship');
+const Ship = require('../src/Ship'); // Used for error test below
 
 describe('Testing placeShip', () => {
   let board = null;

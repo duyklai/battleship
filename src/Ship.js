@@ -2,7 +2,7 @@
  * This factory function will take care of creating the ship object.
  * Each ship object will have an array of objects indicating their x/y coordinates and whether that x/y coordinates has been hit
  * Ship object will have a boolean checking if ship has been sunked
- * @param {string} input_name currently not used
+ * @param {string} input_name
  * @param {int} input_length
  * @param {int} input_start
  * @param {int} input_end
@@ -31,6 +31,11 @@ const Ship = (input_name, input_length, input_start, input_end) => {
     return length;
   };
 
+  // Function to return the name of ship
+  const getName = () => {
+    return name;
+  };
+
   // Function to mark that the ship was hit according to ship's length
   const hit = (input_x, input_y) => {
     let index = hit_marker.indexOf(
@@ -48,7 +53,7 @@ const Ship = (input_name, input_length, input_start, input_end) => {
     return sunk;
   };
 
-  return { hit, isSunk, getLength };
+  return { getLength, getName, hit, isSunk };
 };
 
 module.exports = Ship;
