@@ -100,7 +100,7 @@ function setupPlayer() {
   }
 
   player_div.appendChild(player_grid);
-  return [player_div, playerBoard];
+  return [player_div, player_grid, playerBoard];
 }
 
 // Function to create DOM/UI for Computer's board
@@ -149,7 +149,7 @@ function setupComputer() {
     }
   }
   comp_div.appendChild(comp_grid);
-  return [comp_div, computerBoard];
+  return [comp_div, comp_grid, computerBoard];
 }
 
 // Function to create DOM and text for instructions on how to play the game
@@ -201,9 +201,9 @@ function initialSetup() {
 
   // setupStatusBoard() returns div element associated to status board
   let statusBoard = setupStatusBoard();
-  // setupPlayer/setupComputer returns [div of player/comp, board of player/comp]
-  let [playerDiv, playerBoard] = setupPlayer();
-  let [compDiv, compBoard] = setupComputer();
+  // setupPlayer/setupComputer returns [div grid of player/comp, board of player/comp]
+  let [playerDiv, playerGrid, playerBoard] = setupPlayer();
+  let [compDiv, compGrid, compBoard] = setupComputer();
 
   content_div.appendChild(statusBoard);
   content_div.appendChild(playerDiv);
@@ -213,8 +213,8 @@ function initialSetup() {
   body.prepend(header);
 
   // Setups up player objects and pass it to EventsHandler
-  handler.setPlayerOne(Player('player', compBoard, compDiv));
-  handler.setPlayerTwo(Player('computer', playerBoard, playerDiv));
+  handler.setPlayerOne(Player('player', compBoard, compGrid));
+  handler.setPlayerTwo(Player('computer', playerBoard, playerGrid));
 }
 
 export default { initialSetup };

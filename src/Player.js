@@ -21,7 +21,6 @@ const Player = (input_name, enemy_board, enemy_div) => {
   const computerPlay = () => {
     // Computer takes turn
     let index = 0;
-
     // These x/y coordinates has been checked for validity to ensure attack will be hit or miss only (no repeat attacks)
     [x_coor, y_coor] = getRandCoord();
     let attack = enemyBoard.receiveAttack(x_coor, y_coor);
