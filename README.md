@@ -2,6 +2,8 @@
 
 Main focus for this project was a combination of a little bit of unit testing, reviewing DOM manipulation, and usage of javascript factory function/module.
 
+This is the current [Online Demo](https://duyklai.github.io/battleship/)
+
 # Instruction: How to play
 
 Battleship is a guessing game. Each player starts with 5 ships, which can be placed on the 10 x 10 board. Player can place their ships by clicking on the name of the ships on the left bar and choose a space on the board for it. The ship MUST fit inside of the board and CANNOT overlap with other ships. Once both players have placed their ships, they take turn choosing a square on the board to attack. The attack will be marked white if missed and red if it hits a part of a ship. The game ends when one player sinks all of the ships of their opponents.
