@@ -30,7 +30,8 @@ Then,
 
 ### `npm run build`
 
-Launching `/dist/index.html` will result in the game being launched on your browser.
+Included is the basic webpack index.html and the style.css already attached.
+Launching `/dist/index.html` will launch the game on your browser.
 
 # Future todos/improvements:
 
