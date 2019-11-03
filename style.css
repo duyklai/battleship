@@ -1,0 +1,156 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+body {
+  background-color: #585858;
+}
+
+header {
+  padding-top: 15px;
+  font-size: 55px;
+  text-align: center;
+  color: #ffa71a;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px black;
+}
+
+.instruction-div {
+  width: 20%;
+  font-size: 15px;
+  padding-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.instruction-title {
+  text-align: center;
+  color: #ffa71a;
+  /* Black outline around text */
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.instruction-div ul {
+  list-style: none;
+}
+
+.instruction-div ul li::before {
+  content: '\2022';
+  color: #ffa71a;
+  font-weight: bold;
+  /* Needed to add space between the bullet and the text */
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.content-div {
+  display: flex;
+  margin-top: 50px;
+}
+
+/* Ship Board/Div styling */
+.ship-div {
+  text-align: center;
+  width: 190px;
+  height: 280px;
+  letter-spacing: 1px;
+  margin-left: 70px;
+  margin-top: 33px;
+  border: 5px solid black;
+}
+
+.ship-div h2 {
+  color: #ffa71a;
+}
+
+.ship-div p {
+  padding: 10px 0px 10px 0px;
+  font-size: 15px;
+}
+
+.ship-div p:hover {
+  color: #ffa71a;
+  cursor: pointer;
+}
+
+.selected-ship {
+  color: #ffa71a;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.ship-div button {
+  height: 20px;
+  width: 100px;
+  margin-top: 5px;
+  color: #ffa71a;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+/* Override ship-div button to create more attractive start game button */
+.start-game {
+  margin-top: 50px !important;
+  font-size: 25px;
+  height: 60px !important;
+}
+
+.restart-game {
+  margin-top: 10px !important;
+  font-size: 25px;
+  height: 60px !important;
+}
+
+.start-game:hover,
+.restart-game:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+.mini-restart-game {
+  width: 120px !important;
+}
+
+.mini-restart-game:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+/* Main boards/Player boards styling */
+.player-div,
+.comp-div {
+  margin-left: 50px;
+}
+
+.fleet {
+  text-align: center;
+  color: #ffa71a;
+  padding-bottom: 5px;
+}
+
+.player-grid,
+.comp-grid {
+  display: grid;
+  width: 30vw;
+  height: 30vw;
+  border: 10px solid black;
+  background-color: #696969;
+}
+
+.phantom,
+.selected {
+  background-color: black;
+}
+
+.square {
+  border: 0.5px solid #ffa71a;
+}
+
+.comp-div .square:hover {
+  background-color: #ffa71a;
+}
